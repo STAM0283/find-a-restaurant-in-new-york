@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv/config');
 
 const app = express();
 const cors = require('cors');
@@ -16,10 +17,17 @@ app.use(morgan('tiny'));
 app.use('/allRestaurants', routerAllRestaurants);
 
 // Connect To DataBase
-mongoose.connect('mongodb://localhost:27017/new_york', (err) => {
-  if (err) throw err;
-  console.log('CONNECTED TO DATABASE');
-});
+mongoose.connect(
+  process.env.DB_CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  }, (err) => {
+    if (err) throw err;
+    console.log('CONNECTED TO DATABASE');
+  },
+);
 app.listen(PORT, (err) => {
   if (err) throw err;
   console.log(`SERVER WAS LISNED AT PORT : ${PORT}`);
